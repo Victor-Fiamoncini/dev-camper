@@ -2,6 +2,8 @@ import express, { Application } from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
 
+import database from './app/database'
+
 export default class App {
 	private app: Application
 
@@ -19,5 +21,6 @@ export default class App {
 		this.app.use(express.json())
 		this.app.use(morgan('dev'))
 		this.app.use(cors())
+		this.app.use(database)
 	}
 }
