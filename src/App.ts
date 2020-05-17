@@ -4,6 +4,7 @@ import morgan from 'morgan'
 
 import routes from './routes'
 import database from './app/database'
+import errorHandler from './app/middlewares/error'
 
 export default class App {
 	private app: Application
@@ -27,6 +28,8 @@ export default class App {
 		this.app.use(express.json())
 		this.app.use(morgan('dev'))
 		this.app.use(cors())
+
+		this.app.use(errorHandler)
 		this.app.use(routes)
 	}
 }
