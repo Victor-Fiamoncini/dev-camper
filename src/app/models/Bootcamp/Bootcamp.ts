@@ -25,11 +25,9 @@ const BootcampSchama = new Schema(
 		},
 		phone: {
 			type: String,
-			required: true,
 		},
 		email: {
 			type: String,
-			required: true,
 		},
 		address: {
 			type: String,
@@ -39,11 +37,9 @@ const BootcampSchama = new Schema(
 			type: {
 				type: String,
 				enum: ['Point'],
-				required: true,
 			},
 			coordinates: {
 				type: [Number],
-				required: true,
 				index: '2dsphere',
 			},
 			formattedAddress: String,
@@ -62,6 +58,7 @@ const BootcampSchama = new Schema(
 				'UI/UX',
 				'Data Science',
 				'Marketing',
+				'Business',
 				'Other',
 			],
 		},

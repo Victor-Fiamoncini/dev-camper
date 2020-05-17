@@ -1,6 +1,6 @@
 import { Document } from 'mongoose'
 
-export default interface IBootcamp extends Document {
+export default interface IBootcampDTO extends Document {
 	name: string
 	slug?: string
 	description: string
