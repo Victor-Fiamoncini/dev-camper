@@ -1,4 +1,5 @@
 import { model, Schema } from 'mongoose'
+import IBootcamp from './Types'
 
 const BootcampSchama = new Schema(
 	{
@@ -99,4 +100,4 @@ const BootcampSchama = new Schema(
 	}
 )
 
-export default model('Bootcamp', BootcampSchama)
+export default model<IBootcamp>('Bootcamp', BootcampSchama)

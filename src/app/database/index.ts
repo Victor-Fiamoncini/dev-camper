@@ -10,7 +10,9 @@ export default async () => {
 			useCreateIndex: true,
 			useFindAndModify: false,
 		})
+
+		console.log('Connected to mongo')
 	} catch (err) {
-		console.log(err)
+		console.error(err)
 	}
 }
