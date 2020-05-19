@@ -1,4 +1,7 @@
 import { model, Schema } from 'mongoose'
+import slugify from 'slugify'
+import geocoder from '../../utils/geocoder'
+
 import IBootcamp from './Types'
 
 const BootcampSchama = new Schema(
@@ -96,5 +99,26 @@ const BootcampSchama = new Schema(
 		collection: 'bootcamps',
 	}
 )
+
+BootcampSchama.pre('save', async function (this: IBootcamp, next) {
+	this.slug = slugify(this.name, { lower: true })
+
+	const [location] = await geocoder.geocode(this.address)
+
+	this.location = {
+		type: 'Point',
+		coordinates: [location.longitude, location.latitude],
+		formattedAddress: location.formattedAddress,
+		street: location.streetName,
+		city: location.city,
+		state: location.stateCode,
+		zipcode: location.zipcode,
+		country: location.countryCode,
+	}
+
+	this.address = undefined!
+
+	return next()
+})
 
 export default model<IBootcamp>('Bootcamp', BootcampSchama)

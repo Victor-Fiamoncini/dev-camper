@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express'
 
-import asyncHandler from '../app/middlewares/asyncHandler'
 import BootcampController from '../app/controllers/BootcampController'
+import asyncHandler from '../app/middlewares/asyncHandler'
 
 const router = Router()
 
