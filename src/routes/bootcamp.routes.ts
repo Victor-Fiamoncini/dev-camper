@@ -39,4 +39,11 @@ router.delete(
 	)
 )
 
+router.get(
+	'/radius/:zipcode/:distance',
+	asyncHandler((req: Request, res: Response) =>
+		BootcampController.getBootcampsInRadius(req, res)
+	)
+)
+
 export default router

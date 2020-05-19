@@ -12,8 +12,8 @@ export default class BootcampDAO extends MongoDAO<IBootcamp> {
 		return await dto.save()
 	}
 
-	public async index(): Promise<IBootcamp[] | null> {
-		return await this.model.find()
+	public async index(query: object = {}): Promise<IBootcamp[] | null> {
+		return await this.model.find(query)
 	}
 
 	public async show(id: string): Promise<IBootcamp | null> {
@@ -29,5 +29,15 @@ export default class BootcampDAO extends MongoDAO<IBootcamp> {
 
 	public async destroy(id: string): Promise<IBootcamp | null> {
 		return await this.model.findByIdAndDelete(id)
+	}
+
+	public async getBootcampsInRadius(lat: number, lng: number, radius: number) {
+		return await this.model.find({
+			location: {
+				$geoWithin: {
+					$centerSphere: [[lng, lat], radius],
+				},
+			},
+		})
 	}
 }

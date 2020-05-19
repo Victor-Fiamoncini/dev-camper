@@ -1,15 +1,18 @@
 import { Request, Response } from 'express'
 
-import BaseController from './BaseController'
 import BootcampDAO from '../models/Bootcamp/BootcampDAO'
 import Bootcamp from '../models/Bootcamp/Bootcamp'
 
-class BootcampController extends BaseController {
+import geocoder from '../utils/geocoder'
+
+class BootcampController {
+	private dao: BootcampDAO
+
 	public constructor(dao: BootcampDAO) {
-		super(dao)
+		this.dao = dao
 	}
 
-	async store(req: Request, res: Response) {
+	public async store(req: Request, res: Response) {
 		const bootcampDto = new Bootcamp(req.body)
 		const bootcamp = await this.dao.store(bootcampDto)
 
@@ -17,9 +20,14 @@ class BootcampController extends BaseController {
 	}
 
 	public async index(req: Request, res: Response) {
-		const bootcamps = await this.dao.index()
+		let query = JSON.stringify(req.query).replace(
+			/\b(gt|gte|lt|lte|in)\b/g,
+			(match) => `$${match}`
+		)
 
-		return res.status(201).json({ bootcamps })
+		const bootcamps = await this.dao.index(JSON.parse(query))
+
+		return res.status(201).json({ count: bootcamps?.length, bootcamps })
 	}
 
 	public async show(req: Request, res: Response) {
@@ -42,6 +50,20 @@ class BootcampController extends BaseController {
 		const bootcamp = await this.dao.destroy(req.params.id)
 
 		return res.status(200).json({ bootcamp })
+	}
+
+	public async getBootcampsInRadius(req: Request, res: Response) {
+		const { zipcode, distance } = req.params
+
+		const [location] = await geocoder.geocode(zipcode)
+		const lat = location.latitude
+		const lng = location.longitude
+
+		const radius = Number(distance) / 3963
+
+		const bootcamps = await this.dao.getBootcampsInRadius(lat, lng, radius)
+
+		return res.status(201).json({ count: bootcamps?.length, bootcamps })
 	}
 }
 
