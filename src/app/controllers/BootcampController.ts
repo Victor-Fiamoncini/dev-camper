@@ -20,14 +20,11 @@ class BootcampController {
 	}
 
 	public async index(req: Request, res: Response) {
-		let query = JSON.stringify(req.query).replace(
-			/\b(gt|gte|lt|lte|in)\b/g,
-			(match) => `$${match}`
-		)
+		const { page = 1, perPage = 5 } = req.query
 
-		const bootcamps = await this.dao.index(JSON.parse(query))
+		const bootcamps = await this.dao.index(Number(page), Number(perPage))
 
-		return res.status(201).json({ count: bootcamps?.length, bootcamps })
+		return res.status(201).json(bootcamps)
 	}
 
 	public async show(req: Request, res: Response) {

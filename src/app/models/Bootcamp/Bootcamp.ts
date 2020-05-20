@@ -1,4 +1,5 @@
-import { model, Schema } from 'mongoose'
+import { model, PaginateModel, Schema } from 'mongoose'
+import { mongoosePagination } from 'ts-mongoose-pagination'
 import slugify from 'slugify'
 import geocoder from '../../utils/geocoder'
 
@@ -100,6 +101,8 @@ const BootcampSchama = new Schema(
 	}
 )
 
+BootcampSchama.plugin(mongoosePagination)
+
 BootcampSchama.pre('save', async function (this: IBootcamp, next) {
 	this.slug = slugify(this.name, { lower: true })
 
@@ -121,4 +124,6 @@ BootcampSchama.pre('save', async function (this: IBootcamp, next) {
 	return next()
 })
 
-export default model<IBootcamp>('Bootcamp', BootcampSchama)
+const bootcamps: PaginateModel<IBootcamp> = model('Bootcamp', BootcampSchama)
+
+export default bootcamps

@@ -1,12 +1,9 @@
-import { Document, Model } from 'mongoose'
+import { Document, PaginateModel } from 'mongoose'
 
-import BaseDAO from './BaseDAO'
+export default abstract class MongoDAO<T extends Document> {
+	protected model: PaginateModel<T>
 
-export default abstract class MongoDAO<T extends Document> extends BaseDAO<T> {
-	protected model: Model<T>
-
-	public constructor(model: Model<T>) {
-		super()
+	protected constructor(model: PaginateModel<T>) {
 		this.model = model
 	}
 }

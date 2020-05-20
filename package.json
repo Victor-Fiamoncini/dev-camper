@@ -15,6 +15,7 @@
     "morgan": "^1.10.0",
     "node-geocoder": "^3.27.0",
     "slugify": "^1.4.0",
+    "ts-mongoose-pagination": "^1.1.2",
     "ts-node": "^8.10.1"
   },
   "devDependencies": {
