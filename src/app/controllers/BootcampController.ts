@@ -12,19 +12,12 @@ class BootcampController {
 		this.dao = dao
 	}
 
-	public async store(req: Request, res: Response) {
-		const bootcampDto = new Bootcamp(req.body)
-		const bootcamp = await this.dao.store(bootcampDto)
-
-		return res.status(201).json({ bootcamp })
-	}
-
 	public async index(req: Request, res: Response) {
 		const { page = 1, perPage = 5 } = req.query
 
 		const bootcamps = await this.dao.index(Number(page), Number(perPage))
 
-		return res.status(201).json(bootcamps)
+		return res.status(200).json(bootcamps)
 	}
 
 	public async show(req: Request, res: Response) {
@@ -34,19 +27,26 @@ class BootcampController {
 			return res.status(400).json({ error: 'Bootcamp not found' })
 		}
 
-		return res.status(201).json({ bootcamp })
+		return res.status(200).json(bootcamp)
+	}
+
+	public async store(req: Request, res: Response) {
+		const bootcampDto = new Bootcamp(req.body)
+		const bootcamp = await this.dao.store(bootcampDto)
+
+		return res.status(201).json(bootcamp)
 	}
 
 	public async update(req: Request, res: Response) {
 		const bootcamp = await this.dao.update(req.params.id, req.body)
 
-		return res.status(200).json({ bootcamp })
+		return res.status(200).json(bootcamp)
 	}
 
 	public async destroy(req: Request, res: Response) {
 		const bootcamp = await this.dao.destroy(req.params.id)
 
-		return res.status(200).json({ bootcamp })
+		return res.status(200).json(bootcamp)
 	}
 
 	public async getBootcampsInRadius(req: Request, res: Response) {
@@ -60,7 +60,7 @@ class BootcampController {
 
 		const bootcamps = await this.dao.getBootcampsInRadius(lat, lng, radius)
 
-		return res.status(201).json({ count: bootcamps?.length, bootcamps })
+		return res.status(200).json(bootcamps)
 	}
 }
 

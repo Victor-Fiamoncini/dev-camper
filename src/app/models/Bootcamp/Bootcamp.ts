@@ -3,7 +3,7 @@ import { mongoosePagination } from 'ts-mongoose-pagination'
 import slugify from 'slugify'
 import geocoder from '../../utils/geocoder'
 
-import IBootcamp from './Types'
+import IBootcampDTO from './Types'
 
 const BootcampSchama = new Schema(
 	{
@@ -103,7 +103,7 @@ const BootcampSchama = new Schema(
 
 BootcampSchama.plugin(mongoosePagination)
 
-BootcampSchama.pre('save', async function (this: IBootcamp, next) {
+BootcampSchama.pre('save', async function (this: IBootcampDTO, next) {
 	this.slug = slugify(this.name, { lower: true })
 
 	const [location] = await geocoder.geocode(this.address)
@@ -124,6 +124,6 @@ BootcampSchama.pre('save', async function (this: IBootcamp, next) {
 	return next()
 })
 
-const bootcamps: PaginateModel<IBootcamp> = model('Bootcamp', BootcampSchama)
+const bootcamps: PaginateModel<IBootcampDTO> = model('Bootcamp', BootcampSchama)
 
 export default bootcamps

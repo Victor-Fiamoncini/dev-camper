@@ -11,7 +11,7 @@ export default async () => {
 			useFindAndModify: false,
 		})
 
-		console.log('Connected to mongo')
+		console.log('Connected to MongoDB')
 	} catch (err) {
 		console.error(err)
 	}

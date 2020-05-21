@@ -1,15 +1,11 @@
 import { PaginateModel } from 'mongoose'
 
 import MongoDAO from '../MongoDAO'
-import IBootcamp from './Types'
+import IBootcampDTO from './Types'
 
-export default class BootcampDAO extends MongoDAO<IBootcamp> {
-	public constructor(model: PaginateModel<IBootcamp>) {
+export default class BootcampDAO extends MongoDAO<IBootcampDTO> {
+	public constructor(model: PaginateModel<IBootcampDTO>) {
 		super(model)
-	}
-
-	public async store(dto: IBootcamp): Promise<IBootcamp> {
-		return await dto.save()
 	}
 
 	public async index(page: number, perPage: number) {
@@ -27,7 +23,11 @@ export default class BootcampDAO extends MongoDAO<IBootcamp> {
 		return await this.model.findById(id)
 	}
 
-	public async update(id: string, dto: IBootcamp) {
+	public async store(dto: IBootcampDTO): Promise<IBootcampDTO> {
+		return await dto.save()
+	}
+
+	public async update(id: string, dto: IBootcampDTO) {
 		return await this.model.findByIdAndUpdate(id, dto, {
 			new: true,
 			runValidators: true,

@@ -1,49 +1,37 @@
-import { Request, Response, Router } from 'express'
-
+import { Router } from 'express'
 import BootcampController from '../app/controllers/BootcampController'
 import asyncHandler from '../app/middlewares/asyncHandler'
 
 const router = Router()
 
-router.post(
-	'/',
-	asyncHandler((req: Request, res: Response) =>
-		BootcampController.store(req, res)
-	)
-)
 router.get(
 	'/',
-	asyncHandler((req: Request, res: Response) =>
-		BootcampController.index(req, res)
-	)
+	asyncHandler((req, res) => BootcampController.index(req, res))
+)
+
+router.post(
+	'/',
+	asyncHandler((req, res) => BootcampController.store(req, res))
 )
 
 router.get(
 	'/:id',
-	asyncHandler((req: Request, res: Response) =>
-		BootcampController.show(req, res)
-	)
+	asyncHandler((req, res) => BootcampController.show(req, res))
 )
 
 router.put(
 	'/:id',
-	asyncHandler((req: Request, res: Response) =>
-		BootcampController.update(req, res)
-	)
+	asyncHandler((req, res) => BootcampController.update(req, res))
 )
 
 router.delete(
 	'/:id',
-	asyncHandler((req: Request, res: Response) =>
-		BootcampController.destroy(req, res)
-	)
+	asyncHandler((req, res) => BootcampController.destroy(req, res))
 )
 
 router.get(
 	'/radius/:zipcode/:distance',
-	asyncHandler((req: Request, res: Response) =>
-		BootcampController.getBootcampsInRadius(req, res)
-	)
+	asyncHandler((req, res) => BootcampController.getBootcampsInRadius(req, res))
 )
 
 export default router

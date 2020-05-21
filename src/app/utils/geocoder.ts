@@ -1,9 +1,11 @@
-import NodeGeocoder from 'node-geocoder'
+import geocoder from 'node-geocoder'
 
-export default NodeGeocoder({
+const { GEOCODER_API_KEY, GEOCODER_PROVIDER } = process.env
+
+export default geocoder({
 	// @ts-ignore: Unreachable code error
-	provider: process.env.GEOCODER_PROVIDER,
+	provider: GEOCODER_PROVIDER,
 	httpAdapter: 'https',
-	apiKey: process.env.GEOCODER_API_KEY,
+	apiKey: GEOCODER_API_KEY,
 	formatter: null,
 })

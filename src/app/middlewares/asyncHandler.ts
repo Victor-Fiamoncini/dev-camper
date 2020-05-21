@@ -1,6 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
 
-export default (fn: Function) => (
+type ExpressResolver = (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => Promise<Response>
+
+export default (fn: ExpressResolver) => (
 	req: Request,
 	res: Response,
 	next: NextFunction
