@@ -26,6 +26,17 @@ export default class CourseDAO extends MongoDAO<ICourseDTO> {
 		return await this.model.create(dto)
 	}
 
+	public async update(id: string, dto: ICourseDTO) {
+		return await this.model.findByIdAndUpdate(id, dto, {
+			new: true,
+			runValidators: true,
+		})
+	}
+
+	public async destroy(id: string) {
+		return await this.model.findByIdAndDelete(id)
+	}
+
 	public async getCoursesByBootcampId(bootcampId: string) {
 		return await this.model.find({ bootcamp: bootcampId })
 	}

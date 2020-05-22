@@ -40,11 +40,19 @@ class BootcampController {
 	public async update(req: Request, res: Response) {
 		const bootcamp = await this.dao.update(req.params.bootcampId, req.body)
 
+		if (!bootcamp) {
+			return res.status(400).json({ error: 'Bootcamp not found' })
+		}
+
 		return res.status(200).json(bootcamp)
 	}
 
 	public async destroy(req: Request, res: Response) {
 		const bootcamp = await this.dao.destroy(req.params.bootcampId)
+
+		if (!bootcamp) {
+			return res.status(400).json({ error: 'Bootcamp not found' })
+		}
 
 		return res.status(200).json(bootcamp)
 	}
@@ -59,6 +67,10 @@ class BootcampController {
 		const radius = Number(distance) / 3963
 
 		const bootcamps = await this.dao.getBootcampsByRadius(lat, lng, radius)
+
+		if (bootcamps.length === 0) {
+			return res.status(400).json({ error: 'No bootcamps found' })
+		}
 
 		return res.status(200).json(bootcamps)
 	}

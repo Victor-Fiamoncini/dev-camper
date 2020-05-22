@@ -20,6 +20,16 @@ router.post(
 	asyncHandler((req, res) => CourseController.store(req, res))
 )
 
+router.put(
+	'/:courseId',
+	asyncHandler((req, res) => CourseController.update(req, res))
+)
+
+router.delete(
+	'/:courseId',
+	asyncHandler((req, res) => CourseController.destroy(req, res))
+)
+
 router.get(
 	'/bootcamp/:bootcampId',
 	asyncHandler((req, res) => CourseController.getCoursesByBootcampId(req, res))
