@@ -4,7 +4,7 @@ import slugify from 'slugify'
 
 import ICourseDTO from './Types'
 
-const CoursesSchama = new Schema(
+const CoursesSchama = new Schema<ICourseDTO>(
 	{
 		title: {
 			type: String,

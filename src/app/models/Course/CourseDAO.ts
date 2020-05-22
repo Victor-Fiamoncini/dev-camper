@@ -8,14 +8,25 @@ export default class CourseDAO extends MongoDAO<ICourseDTO> {
 		super(model)
 	}
 
-	public async index(bootcampId: string, page: number, perPage: number) {
-		return await this.model.paginate(
-			{ bootcamp: bootcampId },
-			{
-				page,
-				perPage,
-				sort: { createdAt: -1 },
-			}
-		)
+	public async index() {
+		return await this.model.find().populate({
+			path: 'bootcamp',
+			select: 'name description',
+		})
+	}
+
+	public async show(id: string) {
+		return await this.model.findById(id).populate({
+			path: 'bootcamp',
+			select: 'name description',
+		})
+	}
+
+	public async store(dto: ICourseDTO) {
+		return await this.model.create(dto)
+	}
+
+	public async getCoursesByBootcampId(bootcampId: string) {
+		return await this.model.find({ bootcamp: bootcampId })
 	}
 }

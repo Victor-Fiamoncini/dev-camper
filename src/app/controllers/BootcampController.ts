@@ -21,7 +21,7 @@ class BootcampController {
 	}
 
 	public async show(req: Request, res: Response) {
-		const bootcamp = await this.dao.show(req.params.id)
+		const bootcamp = await this.dao.show(req.params.bootcampId)
 
 		if (!bootcamp) {
 			return res.status(400).json({ error: 'Bootcamp not found' })
@@ -38,18 +38,18 @@ class BootcampController {
 	}
 
 	public async update(req: Request, res: Response) {
-		const bootcamp = await this.dao.update(req.params.id, req.body)
+		const bootcamp = await this.dao.update(req.params.bootcampId, req.body)
 
 		return res.status(200).json(bootcamp)
 	}
 
 	public async destroy(req: Request, res: Response) {
-		const bootcamp = await this.dao.destroy(req.params.id)
+		const bootcamp = await this.dao.destroy(req.params.bootcampId)
 
 		return res.status(200).json(bootcamp)
 	}
 
-	public async getBootcampsInRadius(req: Request, res: Response) {
+	public async getBootcampsByRadius(req: Request, res: Response) {
 		const { zipcode, distance } = req.params
 
 		const [location] = await geocoder.geocode(zipcode)
@@ -58,7 +58,7 @@ class BootcampController {
 
 		const radius = Number(distance) / 3963
 
-		const bootcamps = await this.dao.getBootcampsInRadius(lat, lng, radius)
+		const bootcamps = await this.dao.getBootcampsByRadius(lat, lng, radius)
 
 		return res.status(200).json(bootcamps)
 	}

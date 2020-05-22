@@ -20,10 +20,10 @@ export default class BootcampDAO extends MongoDAO<IBootcampDTO> {
 	}
 
 	public async show(id: string) {
-		return await this.model.findById(id)
+		return await this.model.findById(id).populate('courses')
 	}
 
-	public async store(dto: IBootcampDTO): Promise<IBootcampDTO> {
+	public async store(dto: IBootcampDTO) {
 		return await dto.save()
 	}
 
@@ -35,10 +35,12 @@ export default class BootcampDAO extends MongoDAO<IBootcampDTO> {
 	}
 
 	public async destroy(id: string) {
-		return await this.model.findByIdAndDelete(id)
+		const bootcamp = await this.model.findById(id)
+
+		return await bootcamp?.remove()
 	}
 
-	public async getBootcampsInRadius(lat: number, lng: number, radius: number) {
+	public async getBootcampsByRadius(lat: number, lng: number, radius: number) {
 		return await this.model.find({
 			location: {
 				$geoWithin: {

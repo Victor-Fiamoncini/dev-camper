@@ -15,23 +15,23 @@ router.post(
 )
 
 router.get(
-	'/:id',
+	'/:bootcampId',
 	asyncHandler((req, res) => BootcampController.show(req, res))
 )
 
 router.put(
-	'/:id',
+	'/:bootcampId',
 	asyncHandler((req, res) => BootcampController.update(req, res))
 )
 
 router.delete(
-	'/:id',
+	'/:bootcampId',
 	asyncHandler((req, res) => BootcampController.destroy(req, res))
 )
 
 router.get(
 	'/radius/:zipcode/:distance',
-	asyncHandler((req, res) => BootcampController.getBootcampsInRadius(req, res))
+	asyncHandler((req, res) => BootcampController.getBootcampsByRadius(req, res))
 )
 
 export default router

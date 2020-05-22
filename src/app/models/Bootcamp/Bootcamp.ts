@@ -5,7 +5,7 @@ import geocoder from '../../utils/geocoder'
 
 import IBootcampDTO from './Types'
 
-const BootcampSchama = new Schema(
+const BootcampSchama = new Schema<IBootcampDTO>(
 	{
 		name: {
 			type: String,
@@ -98,10 +98,29 @@ const BootcampSchama = new Schema(
 	{
 		timestamps: true,
 		collection: 'bootcamps',
+		toJSON: {
+			virtuals: true,
+		},
+		toObject: {
+			virtuals: true,
+		},
 	}
 )
 
 BootcampSchama.plugin(mongoosePagination)
+
+BootcampSchama.virtual('courses', {
+	ref: 'Course',
+	localField: '_id',
+	foreignField: 'bootcamp',
+	justOne: false,
+})
+
+BootcampSchama.pre('remove', async function (this: IBootcampDTO, next) {
+	await this.model('Course').deleteMany({ bootcamp: this.id })
+
+	return next()
+})
 
 BootcampSchama.pre('save', async function (this: IBootcampDTO, next) {
 	this.slug = slugify(this.name, { lower: true })
