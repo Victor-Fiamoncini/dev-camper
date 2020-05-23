@@ -1,8 +1,10 @@
 import { model, Schema } from 'mongoose'
+import mongoosePagination from 'mongoose-paginate-v2'
 import slugify from 'slugify'
+
 import geocoder from '../../utils/geocoder'
 
-const schema = new Schema(
+const BootcampSchema = new Schema(
 	{
 		name: {
 			type: String,
@@ -104,22 +106,22 @@ const schema = new Schema(
 	}
 )
 
-// schema.plugin(mongoosePagination)
+BootcampSchema.plugin(mongoosePagination)
 
-schema.virtual('courses', {
+BootcampSchema.virtual('courses', {
 	ref: 'Course',
 	localField: '_id',
 	foreignField: 'bootcamp',
 	justOne: false,
 })
 
-schema.pre('remove', async function (next) {
+BootcampSchema.pre('remove', async function (next) {
 	await this.model('Course').deleteMany({ bootcamp: this.id })
 
 	return next()
 })
 
-schema.pre('save', async function (next) {
+BootcampSchema.pre('save', async function (next) {
 	this.slug = slugify(this.name, { lower: true })
 
 	const [location] = await geocoder.geocode(this.address)
@@ -140,4 +142,4 @@ schema.pre('save', async function (next) {
 	return next()
 })
 
-export default model('Bootcamp', schema)
+export default model('Bootcamp', BootcampSchema)

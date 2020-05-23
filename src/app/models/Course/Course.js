@@ -1,7 +1,10 @@
 import { model, Schema } from 'mongoose'
+import mongoosePagination from 'mongoose-paginate-v2'
 import slugify from 'slugify'
 
-const schema = new Schema(
+import Bootcamp from '../Bootcamp/Bootcamp'
+
+const CourseSchema = new Schema(
 	{
 		title: {
 			type: String,
@@ -47,36 +50,42 @@ const schema = new Schema(
 	}
 )
 
-// schema.plugin(mongoosePagination)
+CourseSchema.plugin(mongoosePagination)
 
-schema.pre('save', async function (next) {
+CourseSchema.statics.getAverageCost = async function (bootcampId) {
+	try {
+		const [data] = await this.aggregate([
+			{
+				$match: { bootcamp: bootcampId },
+			},
+			{
+				$group: {
+					_id: '$bootcamp',
+					averageCost: { $avg: '$tuition' },
+				},
+			},
+		])
+
+		await Bootcamp.findByIdAndUpdate(bootcampId, {
+			averageCost: Math.floor(data.averageCost),
+		})
+	} catch (err) {
+		console.log(err)
+	}
+}
+
+CourseSchema.pre('save', function (next) {
 	this.slug = slugify(this.title, { lower: true })
 
 	return next()
 })
 
-schema.statics.getAverageCost = async function (id) {
-	return await this.aggregate([
-		{
-			$match: { bootcamp: id },
-		},
-		{
-			$group: {
-				_id: '$bootcamp',
-				averageCost: {
-					$avg: '$tuition',
-				},
-			},
-		},
-	])
-}
+CourseSchema.post('save', async function () {
+	await this.constructor.getAverageCost(this.bootcamp)
+})
 
-// schema.post('save', function () {
-// this.constructor.getAverageCost(this.bootcamp)
-// })
+CourseSchema.pre('remove', async function () {
+	await this.constructor.getAverageCost(this.bootcamp)
+})
 
-// schema.pre('remove', function () {
-// this.getAverageCost(this.bootcamp)
-// })
-
-export default model('Course', schema)
+export default model('Course', CourseSchema)
