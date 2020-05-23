@@ -34,6 +34,7 @@ class BootcampController {
 	}
 
 	async update(req, res) {
+		req.body.photo = req.file ? req.file.filename : ''
 		const bootcamp = await this.dao.update(req.params.bootcampId, req.body)
 
 		if (!bootcamp) {
