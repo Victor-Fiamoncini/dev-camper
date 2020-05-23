@@ -8,4 +8,8 @@ export default class UserDAO extends BaseDAO {
 	async store(dto) {
 		return await dto.save()
 	}
+
+	async findByEmail(email) {
+		return await this.model.findOne({ email }).select('+password')
+	}
 }

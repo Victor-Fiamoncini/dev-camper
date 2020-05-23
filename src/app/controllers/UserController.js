@@ -17,6 +17,7 @@ class UserController {
 		})
 
 		const user = await this.dao.store(userDto)
+		user.password = undefined
 
 		return res.status(201).json(user)
 	}

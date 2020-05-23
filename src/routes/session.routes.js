@@ -5,4 +5,6 @@ import asyncHandler from '../app/middlewares/asyncHandler'
 
 const router = Router()
 
+router.post('/', asyncHandler(Controller.store.bind(Controller)))
+
 export default router

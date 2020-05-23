@@ -1,4 +1,6 @@
 import { model, Schema } from 'mongoose'
+import { compare, genSalt, hash } from 'bcrypt'
+import { sign } from 'jsonwebtoken'
 
 const UserSchema = new Schema(
 	{
@@ -13,7 +15,7 @@ const UserSchema = new Schema(
 		},
 		role: {
 			type: String,
-			enum: ['user', 'publisher', 'admin'],
+			enum: ['guest', 'publisher', 'admin'],
 			default: 'user',
 		},
 		password: {
@@ -34,5 +36,21 @@ const UserSchema = new Schema(
 		collection: 'users',
 	}
 )
+
+UserSchema.methods.getSignedJwtToken = function () {
+	const { JWT_AUTH_SECRET, JWT_EXPIRE_TIME } = process.env
+
+	return sign({ id: this._id }, JWT_AUTH_SECRET, { expiresIn: JWT_EXPIRE_TIME })
+}
+
+UserSchema.methods.matchPassword = async function (password) {
+	return await compare(password, this.password)
+}
+
+UserSchema.pre('save', async function (next) {
+	this.password = await hash(this.password, await genSalt(10))
+
+	return next()
+})
 
 export default model('User', UserSchema)
