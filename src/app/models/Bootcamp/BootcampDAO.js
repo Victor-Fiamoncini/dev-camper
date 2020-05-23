@@ -25,9 +25,8 @@ export default class BootcampDAO extends BaseDAO {
 	}
 
 	async update(id, dto) {
-		return await this.model.findByIdAndUpdate(id, dto, {
+		return await this.model.findOneAndUpdate({ _id: id }, dto, {
 			new: true,
-			runValidators: true,
 		})
 	}
 

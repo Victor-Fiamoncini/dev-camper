@@ -77,6 +77,10 @@ const BootcampSchema = new Schema(
 			type: String,
 			default: 'default-photo.jpg',
 		},
+		photoUrl: {
+			type: String,
+			trim: true,
+		},
 		housing: {
 			type: Boolean,
 			default: false,
@@ -137,7 +141,17 @@ BootcampSchema.pre('save', async function (next) {
 		country: location.countryCode,
 	}
 
-	this.address = undefined
+	return next()
+})
+
+BootcampSchema.pre('findOneAndUpdate', function (next) {
+	const updatedFields = this.getUpdate()
+
+	if (updatedFields.photo) {
+		updatedFields.photoUrl = `${process.env.APP_URL}/files/${updatedFields.photo}`
+	}
+
+	this.update(updatedFields).exec()
 
 	return next()
 })
