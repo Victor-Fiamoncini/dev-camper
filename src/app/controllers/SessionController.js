@@ -1,6 +1,8 @@
 import UserDAO from '../models/User/UserDAO'
 import User from '../models/User/User'
 
+import cookieResponse from '../utils/cookieResponse'
+
 class SessionController {
 	constructor(dao) {
 		this.dao = dao
@@ -8,7 +10,6 @@ class SessionController {
 
 	async store(req, res) {
 		const { email, password } = req.body
-
 		const user = await this.dao.findByEmail(email)
 
 		if (!user) {
@@ -21,10 +22,7 @@ class SessionController {
 
 		user.password = undefined
 
-		return res.status(201).json({
-			user,
-			token: user.getSignedJwtToken(),
-		})
+		return cookieResponse(user, 201, res)
 	}
 }
 

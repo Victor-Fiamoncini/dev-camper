@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
+import cookie from 'cookie-parser'
 import { resolve } from 'path'
 
 import routes from './routes'
@@ -27,6 +28,7 @@ export default class App {
 		this.app.use(express.json())
 		this.app.use(morgan('dev'))
 		this.app.use(cors())
+		this.app.use(cookie())
 
 		this.app.use(
 			`/${process.env.FILE_URL_PREFIX}`,
