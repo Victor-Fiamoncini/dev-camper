@@ -1,11 +1,12 @@
+import BaseController from './BaseController'
 import CourseDAO from '../models/Course/CourseDAO'
 import Course from '../models/Course/Course'
 import BootcampDAO from '../models/Bootcamp/BootcampDAO'
 import Bootcamp from '../models/Bootcamp/Bootcamp'
 
-class CourseController {
+class CourseController extends BaseController {
 	constructor(dao) {
-		this.dao = dao
+		super(dao)
 	}
 
 	async index(req, res) {

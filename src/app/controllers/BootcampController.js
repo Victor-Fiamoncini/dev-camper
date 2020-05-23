@@ -1,11 +1,12 @@
+import BaseController from './BaseController'
 import BootcampDAO from '../models/Bootcamp/BootcampDAO'
 import Bootcamp from '../models/Bootcamp/Bootcamp'
 
 import geocoder from '../utils/geocoder'
 
-class BootcampController {
+class BootcampController extends BaseController {
 	constructor(dao) {
-		this.dao = dao
+		super(dao)
 	}
 
 	async index(req, res) {

@@ -40,7 +40,9 @@ const UserSchema = new Schema(
 UserSchema.methods.getSignedJwtToken = function () {
 	const { JWT_AUTH_SECRET, JWT_EXPIRE_TIME } = process.env
 
-	return sign({ id: this._id }, JWT_AUTH_SECRET, { expiresIn: JWT_EXPIRE_TIME })
+	return sign({ id: this._id }, JWT_AUTH_SECRET, {
+		expiresIn: Number(JWT_EXPIRE_TIME),
+	})
 }
 
 UserSchema.methods.matchPassword = async function (password) {

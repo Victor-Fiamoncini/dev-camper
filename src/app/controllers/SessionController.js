@@ -1,11 +1,12 @@
+import BaseController from './BaseController'
 import UserDAO from '../models/User/UserDAO'
 import User from '../models/User/User'
 
 import cookieResponse from '../utils/cookieResponse'
 
-class SessionController {
+class SessionController extends BaseController {
 	constructor(dao) {
-		this.dao = dao
+		super(dao)
 	}
 
 	async store(req, res) {

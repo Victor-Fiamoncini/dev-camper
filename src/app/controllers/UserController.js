@@ -1,9 +1,10 @@
+import BaseController from './BaseController'
 import UserDAO from '../models/User/UserDAO'
 import User from '../models/User/User'
 
-class UserController {
+class UserController extends BaseController {
 	constructor(dao) {
-		this.dao = dao
+		super(dao)
 	}
 
 	async store(req, res) {
