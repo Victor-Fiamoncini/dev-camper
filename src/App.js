@@ -1,4 +1,4 @@
-import express, { Application } from 'express'
+import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
 
@@ -7,24 +7,22 @@ import database from './app/database'
 import errorHandler from './app/middlewares/errorHandler'
 
 export default class App {
-	private app: Application
-
-	public constructor() {
+	constructor() {
 		this.app = express()
 
 		this.databaseInit()
 		this.middlewares()
 	}
 
-	public get _app(): Application {
+	get _app() {
 		return this.app
 	}
 
-	private databaseInit(): void {
+	databaseInit() {
 		database()
 	}
 
-	private middlewares(): void {
+	middlewares() {
 		this.app.use(express.json())
 		this.app.use(morgan('dev'))
 		this.app.use(cors())

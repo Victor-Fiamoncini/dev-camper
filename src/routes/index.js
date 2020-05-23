@@ -1,4 +1,5 @@
 import { Router } from 'express'
+
 import bootcampRoutes from './bootcamp.routes'
 import courseRoutes from './course.routes'
 

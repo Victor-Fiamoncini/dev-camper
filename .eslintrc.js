@@ -3,25 +3,21 @@ module.exports = {
 		browser: true,
 		es6: true,
 	},
-	extends: [
-		'eslint:recommended',
-		'plugin:@typescript-eslint/eslint-recommended',
-	],
+	extends: 'eslint:recommended',
 	globals: {
 		Atomics: 'readonly',
 		SharedArrayBuffer: 'readonly',
+		process: true,
+		module: true,
 	},
-	parser: '@typescript-eslint/parser',
 	parserOptions: {
-		ecmaVersion: 2018,
+		ecmaVersion: 11,
 		sourceType: 'module',
 	},
-	plugins: ['@typescript-eslint'],
 	rules: {
 		indent: ['error', 'tab'],
 		'linebreak-style': ['error', 'unix'],
 		quotes: ['error', 'single'],
 		semi: ['error', 'never'],
-		'no-unused-vars': 'off',
 	},
 }

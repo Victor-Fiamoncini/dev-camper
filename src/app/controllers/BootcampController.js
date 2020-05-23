@@ -1,18 +1,14 @@
-import { Request, Response } from 'express'
-
 import BootcampDAO from '../models/Bootcamp/BootcampDAO'
 import Bootcamp from '../models/Bootcamp/Bootcamp'
 
 import geocoder from '../utils/geocoder'
 
 class BootcampController {
-	private dao: BootcampDAO
-
-	public constructor(dao: BootcampDAO) {
+	constructor(dao) {
 		this.dao = dao
 	}
 
-	public async index(req: Request, res: Response) {
+	async index(req, res) {
 		const { page = 1, perPage = 5 } = req.query
 
 		const bootcamps = await this.dao.index(Number(page), Number(perPage))
@@ -20,7 +16,7 @@ class BootcampController {
 		return res.status(200).json(bootcamps)
 	}
 
-	public async show(req: Request, res: Response) {
+	async show(req, res) {
 		const bootcamp = await this.dao.show(req.params.bootcampId)
 
 		if (!bootcamp) {
@@ -30,14 +26,14 @@ class BootcampController {
 		return res.status(200).json(bootcamp)
 	}
 
-	public async store(req: Request, res: Response) {
+	async store(req, res) {
 		const bootcampDto = new Bootcamp(req.body)
 		const bootcamp = await this.dao.store(bootcampDto)
 
 		return res.status(201).json(bootcamp)
 	}
 
-	public async update(req: Request, res: Response) {
+	async update(req, res) {
 		const bootcamp = await this.dao.update(req.params.bootcampId, req.body)
 
 		if (!bootcamp) {
@@ -47,7 +43,7 @@ class BootcampController {
 		return res.status(200).json(bootcamp)
 	}
 
-	public async destroy(req: Request, res: Response) {
+	async destroy(req, res) {
 		const bootcamp = await this.dao.destroy(req.params.bootcampId)
 
 		if (!bootcamp) {
@@ -57,7 +53,7 @@ class BootcampController {
 		return res.status(200).json(bootcamp)
 	}
 
-	public async getBootcampsByRadius(req: Request, res: Response) {
+	async getBootcampsByRadius(req, res) {
 		const { zipcode, distance } = req.params
 
 		const [location] = await geocoder.geocode(zipcode)

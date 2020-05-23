@@ -1,24 +1,20 @@
-import { Request, Response } from 'express'
-
 import CourseDAO from '../models/Course/CourseDAO'
 import Course from '../models/Course/Course'
 import BootcampDAO from '../models/Bootcamp/BootcampDAO'
 import Bootcamp from '../models/Bootcamp/Bootcamp'
 
 class CourseController {
-	private dao: CourseDAO
-
-	public constructor(dao: CourseDAO) {
+	constructor(dao) {
 		this.dao = dao
 	}
 
-	public async index(req: Request, res: Response) {
+	async index(req, res) {
 		const courses = await this.dao.index()
 
 		return res.status(200).json(courses)
 	}
 
-	public async show(req: Request, res: Response) {
+	async show(req, res) {
 		const course = await this.dao.show(req.params.courseId)
 
 		if (!course) {
@@ -28,7 +24,7 @@ class CourseController {
 		return res.status(200).json(course)
 	}
 
-	public async store(req: Request, res: Response) {
+	async store(req, res) {
 		const bootcamp = await new BootcampDAO(Bootcamp).show(req.params.bootcampId)
 
 		if (!bootcamp) {
@@ -43,7 +39,7 @@ class CourseController {
 		return res.status(201).json(course)
 	}
 
-	public async update(req: Request, res: Response) {
+	async update(req, res) {
 		const course = await this.dao.update(req.params.courseId, req.body)
 
 		if (!course) {
@@ -53,7 +49,7 @@ class CourseController {
 		return res.status(200).json(course)
 	}
 
-	public async destroy(req: Request, res: Response) {
+	async destroy(req, res) {
 		const course = await this.dao.destroy(req.params.courseId)
 
 		if (!course) {
@@ -63,7 +59,7 @@ class CourseController {
 		return res.status(200).json(course)
 	}
 
-	public async getCoursesByBootcampId(req: Request, res: Response) {
+	async getCoursesByBootcampId(req, res) {
 		const courses = await this.dao.getCoursesByBootcampId(req.params.bootcampId)
 
 		if (courses.length === 0) {

@@ -1,11 +1,8 @@
-import { model, PaginateModel, Schema } from 'mongoose'
-import { mongoosePagination } from 'ts-mongoose-pagination'
+import { model, Schema } from 'mongoose'
 import slugify from 'slugify'
 import geocoder from '../../utils/geocoder'
 
-import IBootcampDTO from './Types'
-
-const BootcampSchama = new Schema<IBootcampDTO>(
+const schema = new Schema(
 	{
 		name: {
 			type: String,
@@ -107,22 +104,22 @@ const BootcampSchama = new Schema<IBootcampDTO>(
 	}
 )
 
-BootcampSchama.plugin(mongoosePagination)
+// schema.plugin(mongoosePagination)
 
-BootcampSchama.virtual('courses', {
+schema.virtual('courses', {
 	ref: 'Course',
 	localField: '_id',
 	foreignField: 'bootcamp',
 	justOne: false,
 })
 
-BootcampSchama.pre('remove', async function (this: IBootcampDTO, next) {
+schema.pre('remove', async function (next) {
 	await this.model('Course').deleteMany({ bootcamp: this.id })
 
 	return next()
 })
 
-BootcampSchama.pre('save', async function (this: IBootcampDTO, next) {
+schema.pre('save', async function (next) {
 	this.slug = slugify(this.name, { lower: true })
 
 	const [location] = await geocoder.geocode(this.address)
@@ -138,11 +135,9 @@ BootcampSchama.pre('save', async function (this: IBootcampDTO, next) {
 		country: location.countryCode,
 	}
 
-	this.address = undefined!
+	this.address = undefined
 
 	return next()
 })
 
-const bootcamps: PaginateModel<IBootcampDTO> = model('Bootcamp', BootcampSchama)
-
-export default bootcamps
+export default model('Bootcamp', schema)

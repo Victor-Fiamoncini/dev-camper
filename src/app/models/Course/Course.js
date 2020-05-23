@@ -1,10 +1,7 @@
-import { model, PaginateModel, Schema } from 'mongoose'
-import { mongoosePagination } from 'ts-mongoose-pagination'
+import { model, Schema } from 'mongoose'
 import slugify from 'slugify'
 
-import ICourseDTO from './Types'
-
-const CoursesSchama = new Schema<ICourseDTO>(
+const schema = new Schema(
 	{
 		title: {
 			type: String,
@@ -50,14 +47,36 @@ const CoursesSchama = new Schema<ICourseDTO>(
 	}
 )
 
-CoursesSchama.plugin(mongoosePagination)
+// schema.plugin(mongoosePagination)
 
-CoursesSchama.pre('save', async function (this: ICourseDTO, next) {
+schema.pre('save', async function (next) {
 	this.slug = slugify(this.title, { lower: true })
 
 	return next()
 })
 
-const courses: PaginateModel<ICourseDTO> = model('Course', CoursesSchama)
+schema.statics.getAverageCost = async function (id) {
+	return await this.aggregate([
+		{
+			$match: { bootcamp: id },
+		},
+		{
+			$group: {
+				_id: '$bootcamp',
+				averageCost: {
+					$avg: '$tuition',
+				},
+			},
+		},
+	])
+}
 
-export default courses
+// schema.post('save', function () {
+// this.constructor.getAverageCost(this.bootcamp)
+// })
+
+// schema.pre('remove', function () {
+// this.getAverageCost(this.bootcamp)
+// })
+
+export default model('Course', schema)
