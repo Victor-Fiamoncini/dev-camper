@@ -29,6 +29,10 @@ class SessionController extends BaseController {
 	async refresh(req, res) {
 		const user = await this.dao.show(req.userId)
 
+		if (!user) {
+			return res.status(400).json({ error: 'No session found' })
+		}
+
 		return res.status(200).json(user)
 	}
 }

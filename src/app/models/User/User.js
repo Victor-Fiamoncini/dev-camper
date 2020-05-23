@@ -55,4 +55,12 @@ UserSchema.pre('save', async function (next) {
 	return next()
 })
 
+UserSchema.pre('findOneAndUpdate', async function (next) {
+	const fields = this.getUpdate()
+
+	fields.password = await hash(fields.password, await genSalt(10))
+
+	return next()
+})
+
 export default model('User', UserSchema)

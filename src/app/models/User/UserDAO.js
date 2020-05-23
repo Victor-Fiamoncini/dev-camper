@@ -13,6 +13,17 @@ export default class UserDAO extends BaseDAO {
 		return await dto.save()
 	}
 
+	async update(id, dto) {
+		return await this.model.findOneAndUpdate({ _id: id }, dto, {
+			new: true,
+			runValidators: true,
+		})
+	}
+
+	async destroy(id) {
+		return await this.model.findByIdAndDelete(id)
+	}
+
 	async findByEmail(email) {
 		return await this.model.findOne({ email }).select('+password')
 	}

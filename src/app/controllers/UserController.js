@@ -22,6 +22,26 @@ class UserController extends BaseController {
 
 		return res.status(201).json(user)
 	}
+
+	async update(req, res) {
+		const user = await this.dao.update(req.params.userId, req.body)
+
+		if (!user) {
+			return res.status(400).json({ error: 'User not found' })
+		}
+
+		return res.status(200).json(user)
+	}
+
+	async destroy(req, res) {
+		const user = await this.dao.destroy(req.params.userId)
+
+		if (!user) {
+			return res.status(400).json({ error: 'User not found' })
+		}
+
+		return res.status(200).json(user)
+	}
 }
 
 export default new UserController(new UserDAO(User))
