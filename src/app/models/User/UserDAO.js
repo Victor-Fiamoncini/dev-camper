@@ -5,6 +5,10 @@ export default class UserDAO extends BaseDAO {
 		super(model)
 	}
 
+	async show(id) {
+		return await this.model.findById(id)
+	}
+
 	async store(dto) {
 		return await dto.save()
 	}

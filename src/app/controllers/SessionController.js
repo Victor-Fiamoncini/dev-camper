@@ -24,6 +24,12 @@ class SessionController {
 
 		return cookieResponse(user, 201, res)
 	}
+
+	async refresh(req, res) {
+		const user = await this.dao.show(req.userId)
+
+		return res.status(200).json(user)
+	}
 }
 
 export default new SessionController(new UserDAO(User))
