@@ -1,6 +1,7 @@
 import { model, Schema } from 'mongoose'
 import { compare, genSalt, hash } from 'bcrypt'
 import { sign } from 'jsonwebtoken'
+import { createHash, randomBytes } from 'crypto'
 
 const UserSchema = new Schema(
 	{
@@ -49,8 +50,22 @@ UserSchema.methods.matchPassword = async function (password) {
 	return await compare(password, this.password)
 }
 
+UserSchema.methods.getResetPasswordToken = function () {
+	const resetToken = randomBytes(16).toString('hex')
+
+	this.resetPasswordToken = createHash('sha256')
+		.update(resetToken)
+		.digest('hex')
+
+	this.resetPasswordExpire = Date.now() + 10 * 60 * 1000
+
+	return resetToken
+}
+
 UserSchema.pre('save', async function (next) {
-	this.password = await hash(this.password, await genSalt(10))
+	if (this.isModified('password')) {
+		this.password = await hash(this.password, await genSalt(10))
+	}
 
 	return next()
 })
