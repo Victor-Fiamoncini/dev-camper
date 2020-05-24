@@ -43,6 +43,11 @@ const CourseSchema = new Schema(
 			ref: 'Bootcamp',
 			required: true,
 		},
+		user: {
+			type: Schema.Types.ObjectId,
+			ref: 'User',
+			required: true,
+		},
 	},
 	{
 		timestamps: true,
@@ -70,7 +75,7 @@ CourseSchema.statics.getAverageCost = async function (bootcampId) {
 			averageCost: Math.floor(data.averageCost),
 		})
 	} catch (err) {
-		console.log(err)
+		console.error(err)
 	}
 }
 

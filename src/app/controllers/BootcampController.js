@@ -12,7 +12,7 @@ class BootcampController extends BaseController {
 	async index(req, res) {
 		const { page = 1, perPage = 5 } = req.query
 
-		const bootcamps = await this.dao.index(Number(page), Number(perPage))
+		const bootcamps = await this.dao.index(page, perPage)
 
 		return res.status(200).json(bootcamps)
 	}
@@ -37,7 +37,9 @@ class BootcampController extends BaseController {
 	}
 
 	async update(req, res) {
-		let bootcamp = await this.dao.show(req.params.bootcampId)
+		const { bootcampId } = req.params
+
+		let bootcamp = await this.dao.show(bootcampId)
 
 		if (!bootcamp) {
 			return res.status(400).json({ error: 'Bootcamp not found' })
@@ -55,13 +57,15 @@ class BootcampController extends BaseController {
 			req.body.photoUrl = `${APP_URL}/${FILE_URL_PREFIX}/${filename}`
 		}
 
-		bootcamp = await this.dao.update(req.params.bootcampId, req.body)
+		bootcamp = await this.dao.update(bootcampId, req.body)
 
 		return res.status(200).json(bootcamp)
 	}
 
 	async destroy(req, res) {
-		let bootcamp = await this.dao.show(req.params.bootcampId)
+		const { bootcampId } = req.params
+
+		let bootcamp = await this.dao.show(bootcampId)
 
 		if (!bootcamp) {
 			return res.status(400).json({ error: 'Bootcamp not found' })
@@ -71,7 +75,7 @@ class BootcampController extends BaseController {
 			return res.status(401).json({ error: 'Unauthorized' })
 		}
 
-		bootcamp = await this.dao.destroy(req.params.bootcampId)
+		bootcamp = await this.dao.destroy(bootcampId)
 
 		return res.status(200).json(bootcamp)
 	}

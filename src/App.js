@@ -34,6 +34,7 @@ export default class App {
 			`/${process.env.FILE_URL_PREFIX}`,
 			express.static(resolve(__dirname, '..', 'tmp', 'uploads'))
 		)
+
 		this.app.use(routes)
 		this.app.use(errorHandler)
 	}

@@ -2,7 +2,7 @@ import BaseController from './BaseController'
 import UserDAO from '../models/User/UserDAO'
 import User from '../models/User/User'
 
-import cookieResponse from '../utils/cookieResponse'
+import sendCookie from '../utils/sendCookie'
 
 class SessionController extends BaseController {
 	constructor(dao) {
@@ -22,8 +22,7 @@ class SessionController extends BaseController {
 		}
 
 		user.password = undefined
-
-		return cookieResponse(user, 201, res)
+		return sendCookie(user, 201, res)
 	}
 
 	async refresh(req, res) {
