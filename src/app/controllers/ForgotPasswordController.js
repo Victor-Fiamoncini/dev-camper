@@ -19,22 +19,14 @@ class ForgotPasswordController extends BaseController {
 		const resetToken = user.getResetPasswordToken()
 		await this.dao.store(user)
 
-		const resetUrl = `${req.protocol}://${req.get(
-			'host'
-		)}/sessions/reset/${resetToken}`
-
-		const message = `Hello -> Reset password link: \n\n ${resetUrl}`
-
 		try {
 			await sendMail({
 				to: user.email,
-				subject: 'Password Reset Link',
-				text: message,
+				template: 'mail/forgot_password',
+				context: { resetToken },
 			})
 
-			console.log('AQUII')
-
-			return res.status(201)
+			return res.status(201).json({ success: 'E-mail has been sent' })
 		} catch (err) {
 			user.resetPasswordToken = undefined
 			user.resetPasswordExpire = undefined
