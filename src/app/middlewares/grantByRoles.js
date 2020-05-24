@@ -9,7 +9,7 @@ export default (...roles) => async (req, res, next) => {
 	}
 
 	if (!roles.includes(user.role)) {
-		return res.status(400).json({ error: `Not granted role ${user.role}` })
+		return res.status(401).json({ error: `Not granted role: ${user.role}` })
 	}
 
 	return next()

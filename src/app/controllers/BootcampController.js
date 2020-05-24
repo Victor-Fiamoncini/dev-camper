@@ -28,6 +28,8 @@ class BootcampController extends BaseController {
 	}
 
 	async store(req, res) {
+		req.body.user = req.userId
+
 		const bootcampDto = new Bootcamp(req.body)
 		const bootcamp = await this.dao.store(bootcampDto)
 
@@ -35,6 +37,16 @@ class BootcampController extends BaseController {
 	}
 
 	async update(req, res) {
+		let bootcamp = await this.dao.show(req.params.bootcampId)
+
+		if (!bootcamp) {
+			return res.status(400).json({ error: 'Bootcamp not found' })
+		}
+
+		if (bootcamp.user.toString() !== req.userId) {
+			return res.status(401).json({ error: 'Unauthorized' })
+		}
+
 		if (req.file) {
 			const { filename } = req.file
 			const { APP_URL, FILE_URL_PREFIX } = process.env
@@ -43,21 +55,23 @@ class BootcampController extends BaseController {
 			req.body.photoUrl = `${APP_URL}/${FILE_URL_PREFIX}/${filename}`
 		}
 
-		const bootcamp = await this.dao.update(req.params.bootcampId, req.body)
-
-		if (!bootcamp) {
-			return res.status(400).json({ error: 'Bootcamp not found' })
-		}
+		bootcamp = await this.dao.update(req.params.bootcampId, req.body)
 
 		return res.status(200).json(bootcamp)
 	}
 
 	async destroy(req, res) {
-		const bootcamp = await this.dao.destroy(req.params.bootcampId)
+		let bootcamp = await this.dao.show(req.params.bootcampId)
 
 		if (!bootcamp) {
 			return res.status(400).json({ error: 'Bootcamp not found' })
 		}
+
+		if (bootcamp.user.toString() !== req.userId) {
+			return res.status(401).json({ error: 'Unauthorized' })
+		}
+
+		bootcamp = await this.dao.destroy(req.params.bootcampId)
 
 		return res.status(200).json(bootcamp)
 	}

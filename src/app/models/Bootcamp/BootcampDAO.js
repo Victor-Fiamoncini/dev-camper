@@ -17,7 +17,7 @@ export default class BootcampDAO extends BaseDAO {
 	}
 
 	async show(id) {
-		return await this.model.findById(id).populate('courses')
+		return await this.model.findById(id)
 	}
 
 	async store(dto) {
