@@ -1,8 +1,11 @@
+import { createHash } from 'crypto'
+
 import BaseController from './BaseController'
 import UserDAO from '../models/User/UserDAO'
 import User from '../models/User/User'
 
 import sendMail from '../utils/sendMail'
+import sendCookie from '../utils/sendCookie'
 
 class ForgotPasswordController extends BaseController {
 	constructor(dao) {
@@ -33,8 +36,28 @@ class ForgotPasswordController extends BaseController {
 
 			await this.dao.store(user)
 
-			return res.status(500).json({ error: 'User not found' })
+			return res.status(500).json({ error: err })
 		}
+	}
+
+	async reset(req, res) {
+		const resetPasswordToken = createHash('sha256')
+			.update(req.params.resetToken)
+			.digest('hex')
+
+		const user = await this.dao.findByResetPasswordToken(resetPasswordToken)
+
+		if (!user) {
+			return res.status(400).json({ error: 'Invalid reset password token' })
+		}
+
+		user.password = req.body.password
+		user.resetPasswordToken = undefined
+		user.resetPasswordExpire = undefined
+
+		await this.dao.store(user)
+
+		return sendCookie(user, 201, res)
 	}
 }
 

@@ -20,4 +20,9 @@ router.post(
 	asyncHandler(ForgotPasswordController.store.bind(ForgotPasswordController))
 )
 
+router.put(
+	'/reset/:resetToken',
+	asyncHandler(ForgotPasswordController.reset.bind(ForgotPasswordController))
+)
+
 export default router

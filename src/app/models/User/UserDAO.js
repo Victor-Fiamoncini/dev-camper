@@ -27,4 +27,11 @@ export default class UserDAO extends BaseDAO {
 	async findByEmail(email) {
 		return await this.model.findOne({ email }).select('+password')
 	}
+
+	async findByResetPasswordToken(resetPasswordToken) {
+		return await this.model.findOne({
+			resetPasswordToken,
+			resetPasswordExpire: { $gt: Date.now() },
+		})
+	}
 }
