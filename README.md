@@ -1,6 +1,6 @@
-# Dev Camper 🚀
+# Dev Camper API
 
-REST API for bootcamps/courses management, built with 💚 Express, Mongoose, Multer, JWT...
+REST API for bootcamps/courses management, built with Express, Mongoose, Multer, JWT...
 
 ## How to install and run 🛠
 Using npm:
